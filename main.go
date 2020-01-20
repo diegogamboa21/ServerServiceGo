@@ -1,12 +1,11 @@
 package main
 
 import (
-	"fmt"
-
 	"./controllers"
+	"./utils"
 )
 
 func main() {
-	domain := controllers.ReadDomainInfo("amazon.com")
-	fmt.Println(domain)
+	domain := controllers.ReadDomainInfo("truora.com")
+	utils.PrintDomainInfo(domain)
 }
