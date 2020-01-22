@@ -1,11 +1,15 @@
 package main
 
 import (
+	"fmt"
+
 	"./controllers"
-	"./utils"
 )
 
 func main() {
-	domain := controllers.ReadDomainInfo("truora.com")
-	utils.PrintDomainInfo(domain)
+	controllers.InitDB()
+	fmt.Println("Init Data Base")
+	//domain := controllers.ReadDomainInfo("truora.com")
+	//utils.PrintDomainInfo(domain)
+	fmt.Println("Finished")
 }
