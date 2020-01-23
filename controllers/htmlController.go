@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -32,7 +31,7 @@ func GetValuesHTML(page string, domain *models.Domain) {
 
 	logo, exist := document.Find("link[rel=\"shortcut icon\"]").First().Attr("href")
 	if exist {
-		fmt.Println("href: ", logo)
+		//fmt.Println("href: ", logo)
 		domain.Logo = logo
 	}
 }
