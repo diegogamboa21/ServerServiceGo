@@ -1,5 +1,5 @@
 package models
 
-type itemsList struct {
-	item []Item
+type ListItems struct {
+	Items []Item
 }

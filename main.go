@@ -5,9 +5,8 @@ import (
 )
 
 func main() {
-	page := "trello.com"
-	domain := controllers.ReadDomainInfo(page)
-	controllers.ConnectDB()
-	controllers.InsertDomainOnDB(page, &domain)
-	controllers.DisconnectDB()
+
+	mux := controllers.Routes()
+	server := controllers.NewServer(mux)
+	server.Run()
 }

@@ -32,7 +32,7 @@ func DisconnectDB() {
 
 //InsertDomainOnDB use the struct domain and insert the info on the database
 func InsertDomainOnDB(page string, domain *models.Domain) {
-	id, exists := FindDomainOnDB(domain.Title)
+	id, exists := FindDomainByTitle(domain.Title)
 	if exists && id != 0 {
 		fmt.Println("id encontrado: ", id)
 		diference := CalculateTimeDiference(domain, id)
@@ -133,8 +133,8 @@ func CalculateTimeDiference(domain *models.Domain, id int64) bool {
 	return false
 }
 
-//FindDomainOnDB find the domain and return id
-func FindDomainOnDB(title string) (int64, bool) {
+//FindDomainByTitle find the domain and return id
+func FindDomainByTitle(title string) (int64, bool) {
 	fmt.Println("Title: ", title)
 	row, err := db.Query("SELECT IdDomain FROM ServerService.Domain WHERE Title LIKE '" + title + "';")
 	if err != nil {
@@ -157,7 +157,7 @@ func InsertChanges(domain *models.Domain, id int64) {
 
 }
 
-//InsertItemList
+//InsertItemList insert the list elements on the database
 func InsertItemList(page string, id int64) {
 	query, err := db.Prepare("INSERT INTO ServerService.Item (Site, IdDomain) VALUES ($1,$2);")
 	if err != nil {
@@ -165,4 +165,69 @@ func InsertItemList(page string, id int64) {
 	}
 	query.QueryRow(&page, &id)
 
+}
+
+//FindListItems create list of every element in the database
+func FindListItems() models.ListItems {
+	var listItems models.ListItems
+	query, err := db.Query("SELECT IdItem, Site, IdDomain FROM ServerService.Item;")
+	if err != nil {
+		log.Fatal("Error FindListItems: ", err)
+	}
+	defer query.Close()
+
+	for query.Next() {
+		var item models.Item
+		var idItem int64
+		var site string
+		var idDomain int64
+
+		if err := query.Scan(&idItem, &site, &idDomain); err != nil {
+			log.Fatal("error en FindListItems: ", err)
+		}
+		item.WebURL = site
+		item.Site = FindDomainByID(idDomain)
+		listItems.Items = append(listItems.Items, item)
+	}
+	return listItems
+
+}
+
+//FindDomainByID select the item info from database
+func FindDomainByID(idDomain int64) models.Domain {
+	var d models.Domain
+	query, err := db.Query("SELECT ServersChanged, SSLGrade, PreviusSSLGrade, Logo, Title, IsDown, Time FROM Serverservice.Domain WHERE IdDomain = $1;", idDomain)
+	if err != nil {
+		log.Fatal("Error FindDomainByID: ", err)
+	}
+	defer query.Close()
+
+	for query.Next() {
+		if err := query.Scan(&d.ServersChanged, &d.SSLGrade, &d.PreviusSSLGrade, &d.Logo, &d.Title, &d.IsDown, &d.LastQuery); err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	d.Servers = FindServersByIDDomain(idDomain)
+
+	return d
+}
+
+//FindServersByIDDomain select the servers info from database
+func FindServersByIDDomain(idDomain int64) []models.Server {
+	var servers []models.Server
+	query, err := db.Query("SELECT Address, SSLGrade, Country, Owner FROM Serverservice.Server WHERE IdDomain = $1;", idDomain)
+	if err != nil {
+		log.Fatal("Error FindServersByIDDomain: ", err)
+	}
+	defer query.Close()
+
+	for query.Next() {
+		var s models.Server
+		if err := query.Scan(&s.Address, &s.SSLGrade, &s.Country, &s.Owner); err != nil {
+			log.Fatal(err)
+		}
+		servers = append(servers, s)
+	}
+	return servers
 }
