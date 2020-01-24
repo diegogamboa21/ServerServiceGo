@@ -1,16 +1,13 @@
 package main
 
 import (
-	"fmt"
-
 	"./controllers"
 )
 
 func main() {
-	domain := controllers.ReadDomainInfo("google.com")
-	//utils.PrintDomainInfo(domain)
+	page := "trello.com"
+	domain := controllers.ReadDomainInfo(page)
 	controllers.ConnectDB()
-	controllers.InsertDomainOnDB(&domain)
+	controllers.InsertDomainOnDB(page, &domain)
 	controllers.DisconnectDB()
-	fmt.Println("Finished")
 }

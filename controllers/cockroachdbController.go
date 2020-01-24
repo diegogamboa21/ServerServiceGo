@@ -31,7 +31,7 @@ func DisconnectDB() {
 }
 
 //InsertDomainOnDB use the struct domain and insert the info on the database
-func InsertDomainOnDB(domain *models.Domain) {
+func InsertDomainOnDB(page string, domain *models.Domain) {
 	id, exists := FindDomainOnDB(domain.Title)
 	if exists && id != 0 {
 		fmt.Println("id encontrado: ", id)
@@ -55,6 +55,8 @@ func InsertDomainOnDB(domain *models.Domain) {
 		for _, s := range domain.Servers {
 			InsertServerOnDB(idDom, s)
 		}
+
+		InsertItemList(page, idDom)
 		defer db.Close()
 	}
 
@@ -72,7 +74,7 @@ func InsertServerOnDB(id int64, server models.Server) {
 	query.QueryRow(server.Address, server.SSLGrade, server.Country, server.Owner, id).Scan(&serverID)
 }
 
-//CalculateServersChanged function
+//CalculateServersChanged find the state of the servers
 func CalculateServersChanged(domain *models.Domain, id int64) {
 
 	query, err := db.Query("SELECT Address, SSLGrade, Country, Owner FROM ServerService.server WHERE IdDomain = $1 ;", id)
@@ -99,7 +101,7 @@ func CalculateServersChanged(domain *models.Domain, id int64) {
 
 }
 
-//CalculatePreviusSSLGrade function
+//CalculatePreviusSSLGrade find the new state of the ssl grade
 func CalculatePreviusSSLGrade(domain *models.Domain, id int64) {
 
 	domain.PreviusSSLGrade = domain.SSLGrade
@@ -152,5 +154,15 @@ func InsertChanges(domain *models.Domain, id int64) {
 		log.Fatal("Error insert Domain 4: ", err)
 	}
 	query.QueryRow(domain.ServersChanged, domain.PreviusSSLGrade, domain.LastQuery, id)
+
+}
+
+//InsertItemList
+func InsertItemList(page string, id int64) {
+	query, err := db.Prepare("INSERT INTO ServerService.Item (Site, IdDomain) VALUES ($1,$2);")
+	if err != nil {
+		log.Fatal("Error insert Domain 5: ", err)
+	}
+	query.QueryRow(&page, &id)
 
 }
