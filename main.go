@@ -7,10 +7,10 @@ import (
 )
 
 func main() {
-	controllers.ConnectDB()
-	fmt.Println("Init Data Base")
-	domain := controllers.ReadDomainInfo("amazon.com")
+	domain := controllers.ReadDomainInfo("google.com")
 	//utils.PrintDomainInfo(domain)
+	controllers.ConnectDB()
 	controllers.InsertDomainOnDB(&domain)
+	controllers.DisconnectDB()
 	fmt.Println("Finished")
 }

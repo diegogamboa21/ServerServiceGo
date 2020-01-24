@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 
 	"../models"
 )
@@ -28,6 +29,7 @@ func ReadDomainInfo(page string) models.Domain {
 	ReadWhoisIP(&domain)
 	CalculateServersGrade(&domain)
 	GetValuesHTML(page, &domain)
+	domain.LastQuery = time.Now()
 
 	return domain
 }

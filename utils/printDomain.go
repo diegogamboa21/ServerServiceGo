@@ -19,6 +19,7 @@ func PrintDomainInfo(domain models.Domain) {
 	fmt.Println("Logo: ", domain.Logo)
 	fmt.Println("title: ", domain.Title)
 	fmt.Println("IsDown: ", domain.IsDown)
+	fmt.Println("LastQuery", domain.LastQuery)
 }
 
 //PrintServerInfo show the domain info
