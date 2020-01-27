@@ -38,5 +38,4 @@ func GetValuesHTML(page string, domain *models.Domain) {
 		domain.Logo = logo
 	}
 
-
 }
