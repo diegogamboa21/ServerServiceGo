@@ -2,6 +2,6 @@ package models
 
 //Item struct
 type Item struct {
-	WebURL string
-	Site   Domain
+	WebURL string `json:"WebURL"`
+	Site   Domain `json:"info"`
 }
