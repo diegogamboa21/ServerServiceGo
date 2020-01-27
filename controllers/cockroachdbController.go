@@ -125,7 +125,7 @@ func CalculateTimeDiference(domain *models.Domain, id int64) bool {
 	timeNow := time.Now()
 	timeDiference := timeNow.Sub(lastQuery)
 	fmt.Println("timeDiference: ", timeDiference)
-	if timeDiference.Hours() >= float64(1) {
+	if timeDiference.Minutes() >= float64(1) {
 		domain.LastQuery = timeNow
 		fmt.Println("TimeNow: ", domain.LastQuery)
 		return true

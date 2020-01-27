@@ -36,10 +36,21 @@ func ReadDomainInfo(page string) models.Domain {
 
 //CalculateServersGrade is a function tha calculate the less SSLGrade
 func CalculateServersGrade(domain *models.Domain) {
+	var grades = []string{"A-", "A", "A+", "B-", "B", "B+", "C-", "C", "C+", "D-", "D", "D+", "E-", "E", "E+", "F-", "F", "F+"}
 	if len(domain.Servers) > 0 {
-		domain.SSLGrade = "F"
+		domain.SSLGrade = "F+"
+
+		var grade, serverGrade int
 		for i := 0; i < len(domain.Servers); i++ {
-			if domain.Servers[i].SSLGrade < domain.SSLGrade {
+			for j := 0; j < len(grades); j++ {
+				if domain.Servers[i].SSLGrade == grades[j] {
+					serverGrade = j
+				}
+				if domain.SSLGrade == grades[j] {
+					grade = j
+				}
+			}
+			if serverGrade < grade {
 				domain.SSLGrade = domain.Servers[i].SSLGrade
 			}
 		}
