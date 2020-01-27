@@ -6,7 +6,7 @@ import "time"
 type Domain struct {
 	Servers         []Server  `json:"endpoints"`
 	ServersChanged  bool      `json:"servers_changed"`
-	SSLGrade        string    `json:"ssl_grade"`
+	SSLGrade        string    `json:"grade"`
 	PreviusSSLGrade string    `json:"previous_ssl_grade"`
 	Logo            string    `json:"logo"`
 	Title           string    `json:"title"`

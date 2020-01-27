@@ -29,9 +29,14 @@ func GetValuesHTML(page string, domain *models.Domain) {
 
 	domain.Title = document.Find("title").Text()
 
+	icon, exist := document.Find("link[rel=\"icon\"]").First().Attr("href")
+	if exist {
+		domain.Logo = icon
+	}
 	logo, exist := document.Find("link[rel=\"shortcut icon\"]").First().Attr("href")
 	if exist {
-		//fmt.Println("href: ", logo)
 		domain.Logo = logo
 	}
+
+
 }
