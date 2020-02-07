@@ -17,7 +17,7 @@ var db *sql.DB
 //ConnectDB create a connection with the database CockroachDB on the server Amazon Web Services
 func ConnectDB() {
 	var err error
-	connStr := "postgresql://root@Cockroach-ApiLoadB-7X3AGSGVMTI-1171392840.us-west-1.elb.amazonaws.com:26257?application_name=cockroach&sslmode=disable"
+	connStr := "postgresql://root@Cockroach-ApiLoadB-1BRHEDU07YFOZ-956623734.us-west-1.elb.amazonaws.com:26257?application_name=cockroach&sslmode=disable"
 	db, err = sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal("error connecting to the database: ", err)
@@ -92,7 +92,7 @@ func CalculateServersChanged(domain *models.Domain, id int64) {
 		for _, s := range domain.Servers {
 			if address == s.Address {
 				if sslGrade == s.SSLGrade && country == s.Country && owner == s.Owner {
-					domain.ServersChanged = true
+					domain.ServersChanged = true //Error, this is false
 					fmt.Println("ServersChanged: ", domain.ServersChanged)
 				}
 			}

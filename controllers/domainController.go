@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -32,7 +31,7 @@ func ReadDomainInfo(page string) models.Domain {
 	GetValuesHTML(page, &domain)
 	domain.LastQuery = time.Now()
 
-	fmt.Println("json:....", domain)
+	//fmt.Println("json:....", domain)
 
 	return domain
 }
